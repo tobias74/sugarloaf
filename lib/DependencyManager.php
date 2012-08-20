@@ -6,6 +6,8 @@ class DependencyManager
 {
     static private $instance=false;
     
+    protected $profilerName="";
+    
 	protected function __construct()
 	{
 		if (self::$instance!=false)
@@ -28,6 +30,15 @@ class DependencyManager
 		return self::$instance;
 	}
 	
+	public function setProfilerName($name)
+	{
+		$this->profilerName = $name;
+	}
+	
+	public function getProfilerName()
+	{
+		return $this->profilerName;
+	}
 	
 	public function get($name, $parameters = array())
 	{

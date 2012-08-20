@@ -12,6 +12,45 @@ class CyclicProofFactory
 		
 	}
 	
+	protected function getProfilerName()
+	{
+		return $this->_context->getProfilerName();	
+	}
+	
+	protected function getProfiler()
+	{
+		if ($this->getProfilerName() != "")
+		{
+			return $this->get($this->getProfilerName());	
+		}
+		else 
+		{
+			return false;	
+		}
+	}
+	
+	protected function getStartedTimer($description)
+	{
+		if ($this->getProfiler() != false)
+		{
+			$timer = $this->getProfiler()->startTimer($description);
+			return $timer;
+		}
+		else
+		{
+			return false;
+		}
+	}
+	
+	protected function stopTimer($timer)
+	{
+		if ($timer != false)
+		{
+			$timer->stop();
+		}
+	}
+	
+	
 	public function build($implementationName, $parameters=array())
 	{
 		$instance = $this->_context->instantiateManagedService($implementationName, $parameters);
@@ -23,16 +62,15 @@ class CyclicProofFactory
 
 			$dependency->setManager($this);
 			
-			//$timer = $this->get('PhpProfiler')->startTimer('DM: requesting implementation for '.$implementationName);
-			$timer = $this->get('PhpProfiler')->startTimer('DM: requesting implementation');
+			$timer = $this->getStartedTimer('DM: requesting implementation');
 			$implementation = $dependency->getImplementation($parameters);
-			$timer->stop();
+			$this->stopTimer($timer);
 			
 			$setImplementation = "set".ucfirst($dependency->getInterfaceName());
-			$timer = $this->get('PhpProfiler')->startTimer('DM: setting implementation');
+			$timer = $this->getStartedTimer('DM: setting implementation');
 			$instance->$setImplementation($implementation);
-			$timer->stop();
-			
+			$this->stopTimer($timer);
+						
 		}
 		
 		
