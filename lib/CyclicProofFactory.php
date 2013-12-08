@@ -9,7 +9,8 @@ class CyclicProofFactory
 		$this->_context = $context;
 		
 		$this->_cyclicRecorder = array();
-		
+	
+    $this->_cyclicDependencyStack = array();		
 	}
 	
 	protected function getProfilerName()
@@ -50,30 +51,60 @@ class CyclicProofFactory
 		}
 	}
 	
+	protected function push($name)
+	{
+	  array_push($this->_cyclicDependencyStack,$name);
+	}
 	
+  protected function pop()
+  {
+    return array_pop($this->_cyclicDependencyStack);
+  }
+  
 	public function build($implementationName, $parameters=array())
 	{
-		$instance = $this->_context->instantiateManagedService($implementationName, $parameters);
-		$this->_cyclicRecorder[$implementationName] = $instance;				
-		
-		
-		foreach ($this->_context->getDependencyList($implementationName)->getList() as $dependency)
-		{
+	  $this->push($implementationName);
+	  
+    $serviceHandle = $this->_context->getManagedServiceHandle($implementationName);
 
-			$dependency->setManager($this);
-			
-			$timer = $this->getStartedTimer('DM: requesting implementation');
-			$implementation = $dependency->getImplementation($parameters);
-			$this->stopTimer($timer);
-			
-			$setImplementation = "set".ucfirst($dependency->getInterfaceName());
-			$timer = $this->getStartedTimer('DM: setting implementation');
-			$instance->$setImplementation($implementation);
-			$this->stopTimer($timer);
-						
-		}
+        
+    //$instance = $serviceHandle->getImplementation($parameters, $this->_context);
+    $instance = $serviceHandle->getImplementation($parameters, $this);
+    
+        
+    if (!$serviceHandle->isFullyInstantiated())
+    {
+      $this->_cyclicRecorder[$implementationName] = $instance;        
+
+      
+      foreach ($this->_context->getDependencyList($implementationName)->getList() as $dependency)
+      {
+  
+        $dependency->setManager($this);
+        
+        //$timer = $this->getStartedTimer('DM: requesting implementation for '.$dependency->getImplementationName());
+        $timer2 = $this->getStartedTimer('DM: requesting implementation');
+        $implementation = $dependency->getImplementation($parameters);
+        //$this->stopTimer($timer);
+        $this->stopTimer($timer2);
+                
+        $setImplementation = "set".ucfirst($dependency->getInterfaceName());
+        //$timer = $this->getStartedTimer('DM: setting implementation');
+        $instance->$setImplementation($implementation);
+        //$this->stopTimer($timer);
+              
+      }
+      
+      
+      $serviceHandle->setFullyInstantiated();
+//      if (method_exists($instance,'afterSugarLoafConstruct'))
+//      {
+//        $instance->afterSugarLoafConstruct();
+//      }
+    }
+    
 		
-		
+		$this->pop();
 		return $instance;
 	}
 	
@@ -81,7 +112,11 @@ class CyclicProofFactory
 	{
 		if (isset($this->_cyclicRecorder[$implementationName]))
 		{
-			// cyclic dependency
+		  if (array_search($implementationName,$this->_cyclicDependencyStack) !== false)
+		  {
+        // this is a cyclic dependency!
+        //error_log('NOTICE SUGARLOAF: We have a cyclic dependency with '.$implementationName.' ### STACK: '.print_r($this->_cyclicDependencyStack, true));  
+		  }
 			$implementation = $this->_cyclicRecorder[$implementationName];				
 		}
 		else

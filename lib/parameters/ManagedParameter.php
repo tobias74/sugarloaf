@@ -2,7 +2,7 @@
 
 namespace SugarLoaf;
 
-class ManagedParameter
+class ManagedParameter extends ParameterProvider
 {
 	public function __construct($component)
 	{
@@ -11,7 +11,7 @@ class ManagedParameter
 	
 	public function getParameter()
 	{
-		return DependencyManager::getInstance()->get($this->componentName, array());	
+		return $this->dependencyManager->get($this->componentName, array());	
 	}
 }
 

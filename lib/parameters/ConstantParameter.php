@@ -2,7 +2,7 @@
 
 namespace SugarLoaf;
 
-class ConstantParameter
+class ConstantParameter extends ParameterProvider
 {
 	public function __construct($parameter)
 	{

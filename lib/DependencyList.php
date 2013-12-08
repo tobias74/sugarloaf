@@ -17,6 +17,7 @@ class DependencyList
 	public function addDependency($interfaceName, $component)
 	{
 		$this->addDependencyObject(new Dependency($interfaceName, $component));
+		return $this;
 	}
 	
 	public function getList()

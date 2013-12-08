@@ -19,12 +19,22 @@ class ManagedService
 		
 	}
 	
+	public function isFullyInstantiated()
+	{
+	  return false;
+	}
+	
+	public function setFullyInstantiated()
+	{
+	  // nothing
+	}
+	
 	public function getServiceName()
 	{
 		return $this->_serviceName;
 	}
 	
-	public function getImplementation($parameters=array())
+	public function getImplementation($parameters=array(),$di)
 	{
 		$reflectionObject = new \ReflectionClass($this->_serviceClassRef);
 		$instance = $reflectionObject->newInstanceArgs($parameters);

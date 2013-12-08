@@ -15,3 +15,8 @@ class UnmanagedInstance extends AbstractComponent
 	}
 	
 }
+
+class UnmanagedValue extends UnmanagedInstance
+{
+  
+}

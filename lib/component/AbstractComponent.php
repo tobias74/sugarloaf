@@ -9,16 +9,29 @@ abstract class AbstractComponent
 		$this->parameterProvider = $parameterProvider;
 	}
 	
+	abstract public function getImplementation();
 	
+
+	public function getImplementationName()
+	{
+	  return 'ImpName: '.$this->_instanceName;
+	}
+		
 	public function setManager($manager)
 	{
 		$this->dependencyManager = $manager;
+	}
+	
+	protected function getManager()
+	{
+	  return $this->dependencyManager;
 	}
 	
 	public function getParameters()
 	{
 		if ($this->parameterProvider!==false)
 		{
+		  $this->parameterProvider->setManager($this->dependencyManager);
 			return $this->parameterProvider->getParameters();
 		}
 		else

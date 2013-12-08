@@ -1,7 +1,7 @@
 <?php 
 namespace sugarloaf;
 
-class ConstantParameterArray
+class ConstantParameterArray extends ParameterProvider
 {
 	public function __construct($parameters)
 	{

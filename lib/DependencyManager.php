@@ -7,6 +7,9 @@ class DependencyManager
     static private $instance=false;
     
     protected $profilerName="";
+    protected $_serviceList;
+    protected $_dependenciesForService;
+    
     
 	protected function __construct()
 	{
@@ -47,18 +50,12 @@ class DependencyManager
 		return $instance;
 	}
 	
-	public function instantiateManagedService($name, $parameters=array())
-	{
-		$handle = $this->getManagedServiceHandler($name);
-		return $handle->getImplementation($parameters);
-	}
-	
 	public function getDependencyList($name)
 	{
 		return $this->_dependenciesForService[$name];
 	}
 	
-	public function getManagedServiceHandler($name)
+	public function getManagedServiceHandle($name)
 	{
 		if (!isset($this->_serviceList[$name]))
 		{
