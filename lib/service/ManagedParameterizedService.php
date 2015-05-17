@@ -20,7 +20,7 @@ class ManagedParameterizedService extends ManagedService
     if ($this->_parameters != false)
     {
       $this->_parameters->setManager($di);
-      return parent::getImplementation($this->_parameters->getParameters(), $di);
+      return parent::getImplementation($this->_parameters->getParameter(), $di);
     }
     else 
     {

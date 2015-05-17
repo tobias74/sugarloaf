@@ -8,7 +8,7 @@ class ConstantParameterArray extends ParameterProvider
 		$this->parameters = $parameters;
 	}
 	
-	public function getParameters()
+	public function getParameter()
 	{
 		return $this->parameters;
 	}

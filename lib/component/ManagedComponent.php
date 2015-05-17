@@ -7,7 +7,7 @@ class ManagedComponent extends AbstractComponent
 	
 	public function getImplementation()
 	{
-		return $this->dependencyManager->get($this->_instanceName, $this->getParameters());
+		return $this->dependencyManager->get($this->_instanceName, $this->getParameter());
 	}
 	
 }

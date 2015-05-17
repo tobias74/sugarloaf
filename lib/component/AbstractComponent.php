@@ -27,12 +27,12 @@ abstract class AbstractComponent
 	  return $this->dependencyManager;
 	}
 	
-	public function getParameters()
+	public function getParameter()
 	{
 		if ($this->parameterProvider!==false)
 		{
 		  $this->parameterProvider->setManager($this->dependencyManager);
-			return $this->parameterProvider->getParameters();
+			return $this->parameterProvider->getParameter();
 		}
 		else
 		{

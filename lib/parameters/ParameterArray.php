@@ -15,7 +15,7 @@ class ParameterArray extends ParameterProvider
 		$this->_parameters[] = $parameter;
 	}
 	
-	public function getParameters()
+	public function getParameter()
 	{
 		$output = array();
 		foreach ($this->_parameters as $parameter)
@@ -49,7 +49,7 @@ class OneArrayAsParameter extends ParameterProvider
     $this->_parameters[] = $parameter;
   }
   
-  public function getParameters()
+  public function getParameter()
   {
     $output = array();
     foreach ($this->_parameters as $index => $parameter)

@@ -38,7 +38,7 @@ class ManagedSingleton extends ManagedService
 		    if ($this->_parameters != false)
         {
             $this->_parameters->setManager($di);
-            $this->_instance = parent::getImplementation($this->_parameters->getParameters(),$di);
+            $this->_instance = parent::getImplementation($this->_parameters->getParameter(),$di);
         }
         else 
         {
