@@ -1,5 +1,4 @@
 <?php
-
 namespace SugarLoaf;
 
 class CyclicProofFactory
@@ -13,22 +12,16 @@ class CyclicProofFactory
     $this->_cyclicDependencyStack = array();		
 	}
 	
-	protected function getProfilerName()
-	{
-		return $this->_context->getProfilerName();	
-	}
-	
 	protected function getProfiler()
 	{
-		if ($this->getProfilerName() != "")
-		{
-			return $this->get($this->getProfilerName());	
-		}
-		else 
-		{
-			return false;	
-		}
+		return $this->_context->getProfiler();	
 	}
+
+  protected function getLogger()
+  {
+    return $this->_context->getLogger();  
+  }
+  
 	
 	protected function getStartedTimer($description)
 	{
@@ -82,25 +75,16 @@ class CyclicProofFactory
   
         $dependency->setManager($this);
         
-        //$timer = $this->getStartedTimer('DM: requesting implementation for '.$dependency->getImplementationName());
         $timer2 = $this->getStartedTimer('DM: requesting implementation');
         $implementation = $dependency->getImplementation($parameters);
-        //$this->stopTimer($timer);
         $this->stopTimer($timer2);
                 
         $setImplementation = "set".ucfirst($dependency->getInterfaceName());
-        //$timer = $this->getStartedTimer('DM: setting implementation');
         $instance->$setImplementation($implementation);
-        //$this->stopTimer($timer);
               
       }
       
-      
       $serviceHandle->setFullyInstantiated();
-//      if (method_exists($instance,'afterSugarLoafConstruct'))
-//      {
-//        $instance->afterSugarLoafConstruct();
-//      }
     }
     
 		
@@ -116,6 +100,10 @@ class CyclicProofFactory
 		  {
         // this is a cyclic dependency!
         //error_log('NOTICE SUGARLOAF: We have a cyclic dependency with '.$implementationName.' ### STACK: '.print_r($this->_cyclicDependencyStack, true));  
+        if ($this->getLogger() != false)
+        {
+          $this->getLogger()->debug('Sugarloaf detected a cylic dependency: '.$implementationName.' ### STACK: '.print_r($this->_cyclicDependencyStack, true));
+        }
 		  }
 			$implementation = $this->_cyclicRecorder[$implementationName];				
 		}

@@ -6,7 +6,8 @@ class DependencyManager
 {
     static private $instance=false;
     
-    protected $profilerName="";
+    protected $profiler = false;
+    protected $logger = false;
     protected $_serviceList;
     protected $_dependenciesForService;
     
@@ -33,15 +34,25 @@ class DependencyManager
 		return self::$instance;
 	}
 	
-	public function setProfilerName($name)
+	public function setProfiler($val)
 	{
-		$this->profilerName = $name;
+		$this->profiler = $val;
 	}
 	
-	public function getProfilerName()
+	public function getProfiler()
 	{
-		return $this->profilerName;
+		return $this->profiler;
 	}
+
+  public function setLogger($val)
+  {
+    $this->logger = $val;
+  }
+  
+  public function getLogger()
+  {
+    return $this->logger;
+  }
 	
 	public function get($name, $parameters = array())
 	{
