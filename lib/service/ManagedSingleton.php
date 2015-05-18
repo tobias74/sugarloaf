@@ -1,16 +1,10 @@
 <?php 
 namespace sugarloaf;
 
-class ManagedSingleton extends ManagedService
+class ManagedSingleton extends AbstractManagedService
 {
 	protected $_instance = false;
 	protected $_isFullyInstantiated = false;
-	
-	public function __construct($serviceName, $serviceClassRef=false, $parameters=false)
-	{
-		parent::__construct($serviceName, $serviceClassRef);
-		$this->_parameters = $parameters;
-	}
 	
 	
   public function isFullyInstantiated()
@@ -32,17 +26,19 @@ class ManagedSingleton extends ManagedService
 		{
 			throw new \ErrorException('you cannot parameterize singletons on the fly. they start with what they stat. This is my name: '.$this->getServiceName());
 		}
+
+    $reflectionObject = new \ReflectionClass($this->_serviceClassRef);		
 		
 		if ($this->_instance === false)
 		{
 		    if ($this->_parameters != false)
         {
             $this->_parameters->setManager($di);
-            $this->_instance = parent::getImplementation($this->_parameters->getParameter(),$di);
+            $this->_instance = $reflectionObject->newInstanceArgs($this->_parameters->getParameter());
         }
         else 
         {
-            $this->_instance = parent::getImplementation($parameters, $di);
+            $this->_instance = $reflectionObject->newInstanceArgs(array());
         }
         
             

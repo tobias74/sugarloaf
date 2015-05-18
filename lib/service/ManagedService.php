@@ -2,22 +2,8 @@
 
 namespace sugarloaf;
 
-class ManagedService
+class ManagedService extends AbstractManagedService
 {
-	public function __construct($serviceName, $serviceClassRef=false)
-	{
-		$this->_serviceName = $serviceName;
-		
-		if ($serviceClassRef === false)
-		{
-			$this->_serviceClassRef = $serviceName;
-		}
-		else
-		{
-			$this->_serviceClassRef = $serviceClassRef;
-		}
-		
-	}
 	
 	public function isFullyInstantiated()
 	{
@@ -29,15 +15,36 @@ class ManagedService
 	  // nothing
 	}
 	
-	public function getServiceName()
-	{
-		return $this->_serviceName;
-	}
 	
 	public function getImplementation($parameters=array(),$di)
 	{
-		$reflectionObject = new \ReflectionClass($this->_serviceClassRef);
-		$instance = $reflectionObject->newInstanceArgs($parameters);
+    $reflectionObject = new \ReflectionClass($this->_serviceClassRef);
+
+    if (count($parameters) > 0)
+    {
+      if ($this->_parameters === false)
+      {
+        $instance = $reflectionObject->newInstanceArgs($parameters);
+      }
+      else 
+      {
+        error_log(print_r($parameters, true));
+        throw new \ErrorException('you cannot parameterize this service on the fly. It has already been configured. This is my name: '.$this->getServiceName());
+      }
+    }
+    else 
+    {
+      if ($this->_parameters != false)
+      {
+        $this->_parameters->setManager($di);
+        $instance = $reflectionObject->newInstanceArgs($this->_parameters->getParameter());
+      }
+      else 
+      {
+        $instance = $reflectionObject->newInstanceArgs(array());
+      }
+    }
+    
 		return $instance;
 	}
 	

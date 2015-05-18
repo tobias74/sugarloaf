@@ -2,7 +2,7 @@
 
 namespace SugarLoaf;
 
-abstract class ParameterProvider
+abstract class AbstractParameter
 {
   public function setManager($manager)
   {

@@ -3,10 +3,9 @@ namespace SugarLoaf;
 
 abstract class AbstractComponent
 {
-	public function __construct($instanceName, $parameterProvider=false)
+	public function __construct($instanceName)
 	{
 		$this->_instanceName = $instanceName;
-		$this->parameterProvider = $parameterProvider;
 	}
 	
 	abstract public function getImplementation();
@@ -27,18 +26,6 @@ abstract class AbstractComponent
 	  return $this->dependencyManager;
 	}
 	
-	public function getParameter()
-	{
-		if ($this->parameterProvider!==false)
-		{
-		  $this->parameterProvider->setManager($this->dependencyManager);
-			return $this->parameterProvider->getParameter();
-		}
-		else
-		{
-			return array();			
-		}
-	}
 	
 }
 

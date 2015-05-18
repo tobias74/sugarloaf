@@ -3,7 +3,7 @@
 namespace SugarLoaf;
 
 
-class ParameterArray extends ParameterProvider
+class ParameterArray extends AbstractParameter
 {
 	public function __construct()
 	{
@@ -14,14 +14,19 @@ class ParameterArray extends ParameterProvider
 	{
 		$this->_parameters[] = $parameter;
 	}
+
+  public function appendNamedParameter($name, $parameter)
+  {
+    $this->_parameters[$name] = $parameter;
+  }
 	
 	public function getParameter()
 	{
 		$output = array();
-		foreach ($this->_parameters as $parameter)
+		foreach ($this->_parameters as $index => $parameter)
 		{
 		  $parameter->setManager($this->dependencyManager);
-			$output[] = $parameter->getParameter();
+			$output[$index] = $parameter->getParameter();
 		}
 		
 		return $output;
@@ -32,33 +37,4 @@ class ParameterArray extends ParameterProvider
 
 
 
-class OneArrayAsParameter extends ParameterProvider
-{
-  public function __construct()
-  {
-    $this->_parameters = array();
-  }
-
-  public function appendNamedParameter($name, $parameter)
-  {
-    $this->_parameters[$name] = $parameter;
-  }
-  
-  public function appendParameter($parameter)
-  {
-    $this->_parameters[] = $parameter;
-  }
-  
-  public function getParameter()
-  {
-    $output = array();
-    foreach ($this->_parameters as $index => $parameter)
-    {
-      $parameter->setManager($this->dependencyManager);
-      $output[$index] = $parameter->getParameter();
-    }
-    
-    return array($output);
-  }
-}
 
