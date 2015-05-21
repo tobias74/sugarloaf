@@ -1,0 +1,13 @@
+{
+    "name": "sugarloaf/sugarloaf",
+    "description": "Lightweight Dependency Injection Framework for PHP",
+    "require": {
+        "php": ">=5.3.0",
+        "another-vendor/package": "1.*"
+    },
+    "autoload": {
+        "psr-4": {
+            "Sugarloaf": "src/"
+        }
+    }    
+}

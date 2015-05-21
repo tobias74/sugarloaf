@@ -1,6 +1,5 @@
 <?php
-
-namespace SugarLoaf;
+namespace SugarLoaf\Component;
 
 class ManagedComponentProvider extends AbstractComponent
 {
@@ -16,6 +15,6 @@ class ManagedComponentProvider extends AbstractComponent
 		$parameters = func_get_args();
 		
 		// do not use the cyclic favtory here, this will be called long after dependency management.
-		return DependencyManager::getInstance()->get($this->_instanceName, $parameters);
+		return \Sugarloaf\DependencyManager::getInstance()->get($this->_instanceName, $parameters);
 	}
 }

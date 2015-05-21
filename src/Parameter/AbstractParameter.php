@@ -1,6 +1,5 @@
 <?php 
-
-namespace SugarLoaf;
+namespace SugarLoaf\Parameter;
 
 abstract class AbstractParameter
 {

@@ -1,6 +1,5 @@
 <?php 
-
-namespace SugarLoaf;
+namespace SugarLoaf\Parameter;
 
 
 class ParameterArray extends AbstractParameter

@@ -1,6 +1,5 @@
 <?php
-
-namespace SugarLoaf;
+namespace SugarLoaf\Component;
 
 class UnmanagedInstance extends AbstractComponent
 {
@@ -16,7 +15,9 @@ class UnmanagedInstance extends AbstractComponent
 	
 }
 
+/*
 class UnmanagedValue extends UnmanagedInstance
 {
   
 }
+*/

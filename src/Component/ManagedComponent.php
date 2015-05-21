@@ -1,6 +1,5 @@
 <?php
-
-namespace SugarLoaf;
+namespace SugarLoaf\Component;
 
 class ManagedComponent extends AbstractComponent
 {

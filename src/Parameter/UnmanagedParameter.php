@@ -1,6 +1,5 @@
 <?php 
-
-namespace SugarLoaf;
+namespace SugarLoaf\Parameter;
 
 class UnmanagedParameter extends AbstractParameter
 {

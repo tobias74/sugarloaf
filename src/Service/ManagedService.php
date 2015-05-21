@@ -1,6 +1,5 @@
 <?php 
-
-namespace sugarloaf;
+namespace SugarLoaf\Service;
 
 class ManagedService extends AbstractManagedService
 {

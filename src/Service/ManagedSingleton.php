@@ -1,5 +1,5 @@
 <?php 
-namespace sugarloaf;
+namespace SugarLoaf\Service;
 
 class ManagedSingleton extends AbstractManagedService
 {

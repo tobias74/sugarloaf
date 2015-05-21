@@ -1,5 +1,5 @@
 <?php
-namespace SugarLoaf;
+namespace SugarLoaf\Component;
 
 abstract class AbstractComponent
 {
