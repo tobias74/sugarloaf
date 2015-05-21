@@ -8,5 +8,7 @@
         "psr-4": {
             "Sugarloaf\\": "src/"
         }
-    }    
+    },
+    "license": "MIT"
+        
 }
