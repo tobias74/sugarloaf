@@ -12,28 +12,12 @@ class DependencyManager
     protected $_dependenciesForService;
     
     
-	protected function __construct()
+	public function __construct()
 	{
-		if (self::$instance!=false)
-		{
-			throw new Exception("use of singleton via new. dont do that.");
-			die();
-		}
-		
 		$this->_dependenciesForService = array();
 		$this->_serviceList = array();
-		
     }
 
-	public static function getInstance()
-	{
-		if (!self::$instance)
-		{
-			self::$instance = new static();
-		}
-		return self::$instance;
-	}
-	
 	public function setProfiler($val)
 	{
 		$this->profiler = $val;
@@ -44,15 +28,15 @@ class DependencyManager
 		return $this->profiler;
 	}
 
-  public function setLogger($val)
-  {
-    $this->logger = $val;
-  }
+	public function setLogger($val)
+	{
+    	$this->logger = $val;
+	}
   
-  public function getLogger()
-  {
-    return $this->logger;
-  }
+	public function getLogger()
+	{
+    	return $this->logger;
+	}
 	
 	public function get($name, $parameters = array())
 	{
@@ -87,6 +71,18 @@ class DependencyManager
 		$dl = new DependencyList();
 		$this->addDependencyList($managedService, $dl);
 		return $dl;
+	}
+	
+	public function registerService($serviceName, $serviceClassRef=false, $parameters=false)
+	{
+		$service = new \SugarLoaf\Service\ManagedService($serviceName, $serviceClassRef, $parameters);
+		return $this->registerDependencyManagedService($service);
+	}
+
+	public function registerSingleton($serviceName, $serviceClassRef=false, $parameters=false)
+	{
+		$singleton = new \SugarLoaf\Service\ManagedSingleton($serviceName, $serviceClassRef, $parameters);
+		return $this->registerDependencyManagedService($singleton);
 	}
 	
 }

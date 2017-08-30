@@ -5,7 +5,7 @@ class CyclicProofFactory
 {
 	public function __construct($context)
 	{
-		$this->_context = $context;
+		$this->_dependencyManager = $context;
 		
 		$this->_cyclicRecorder = array();
 	
@@ -14,12 +14,12 @@ class CyclicProofFactory
 	
 	protected function getProfiler()
 	{
-		return $this->_context->getProfiler();	
+		return $this->_dependencyManager->getProfiler();	
 	}
 
   protected function getLogger()
   {
-    return $this->_context->getLogger();  
+    return $this->_dependencyManager->getLogger();  
   }
   
 	
@@ -58,10 +58,10 @@ class CyclicProofFactory
 	{
 	  $this->push($implementationName);
 	  
-    $serviceHandle = $this->_context->getManagedServiceHandle($implementationName);
+    $serviceHandle = $this->_dependencyManager->getManagedServiceHandle($implementationName);
 
         
-    //$instance = $serviceHandle->getImplementation($parameters, $this->_context);
+    //$instance = $serviceHandle->getImplementation($parameters, $this->_dependencyManager);
     $instance = $serviceHandle->getImplementation($parameters, $this);
     
         
@@ -70,10 +70,16 @@ class CyclicProofFactory
       $this->_cyclicRecorder[$implementationName] = $instance;        
 
       
-      foreach ($this->_context->getDependencyList($implementationName)->getList() as $dependency)
+      foreach ($this->_dependencyManager->getDependencyList($implementationName)->getList() as $dependency)
       {
-  
-        $dependency->setManager($this);
+  			if ($dependency->isProvider())
+  			{
+	        $dependency->setManager($this->_dependencyManager);
+  			}
+  			else 
+  			{
+	        $dependency->setManager($this);
+  			}
         
         $timer2 = $this->getStartedTimer('DM: requesting implementation');
         $implementation = $dependency->getImplementation($parameters);

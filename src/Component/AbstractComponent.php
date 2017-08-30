@@ -11,6 +11,17 @@ abstract class AbstractComponent
 	abstract public function getImplementation();
 	
 
+	public function setInterfaceName($val)
+	{
+		// this is the name of the setterMethod, which will be called on the thing later
+		$this->interfaceName = $val;
+	}
+
+	public function getInterfaceName()
+	{
+		return $this->interfaceName;
+	}
+
 	public function getImplementationName()
 	{
 	  return 'ImpName: '.$this->_instanceName;
@@ -24,6 +35,11 @@ abstract class AbstractComponent
 	protected function getManager()
 	{
 	  return $this->dependencyManager;
+	}
+	
+	public function isProvider()
+	{
+		return false;
 	}
 	
 	
