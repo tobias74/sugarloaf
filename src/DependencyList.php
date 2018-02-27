@@ -6,14 +6,14 @@ class DependencyList
 {
 	public function __construct()
 	{
-		$this->_list = array();
+		$this->propertyArray = array();
 		$this->parameterArray = new Parameter\ParameterArray();
 	}
 	
 	public function addDependency($interfaceName, $component)
 	{
 		$component->setInterfaceName($interfaceName);
-		array_push($this->_list, $component);
+		array_push($this->propertyArray, $component);
 		return $this;
 	}
 	
@@ -69,9 +69,9 @@ class DependencyList
 	
 	
 	
-	public function getList()
+	public function getPropertyList()
 	{
-		return $this->_list;
+		return $this->propertyArray;
 	}
 	
 	public function getParameterArray()

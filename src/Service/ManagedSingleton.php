@@ -20,31 +20,27 @@ class ManagedSingleton extends AbstractManagedService
 	
 	
 	
-	public function getImplementation($parameters=array(), $di, $configuredParameterArray)
+	public function instantiate($parameters=array())
 	{
-		if (count($parameters)>0)
-		{
-			throw new \ErrorException('you cannot parameterize singletons on the fly. they start with what they stat. This is my name: '.$this->getServiceName());
-		}
-
     	$reflectionObject = new \ReflectionClass($this->_serviceClassRef);		
 		
 		if ($this->_instance === false)
 		{
-		    if (!$configuredParameterArray->isEmpty())
-        {
-            $configuredParameterArray->setManager($di);
-            $this->_instance = $reflectionObject->newInstanceArgs($configuredParameterArray->getParameter());
-        }
-        else 
-        {
-            $this->_instance = $reflectionObject->newInstanceArgs(array());
-        }
-        
-            
+            $this->_instance = $reflectionObject->newInstanceArgs($parameters);
+			return $this->_instance; 
 		}
-		
-		return $this->_instance; 
+		else 
+		{
+			if (count($parameters)>0)
+			{
+				throw new \ErrorException('you cannot parameterize singletons on the fly. they start with what they stat. This is my name: '.$this->getServiceName());
+			}
+			else 
+			{
+				return $this->_instance; 
+			}
+		}
+
 	}
 	
 }

@@ -8,7 +8,7 @@ class UnmanagedInstance extends AbstractComponent
 		$this->instance = $instance;
 	}
 	
-	public function getImplementation()
+	public function getInstance()
 	{
 		return $this->instance;
 	}

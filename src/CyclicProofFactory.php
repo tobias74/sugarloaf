@@ -61,16 +61,38 @@ class CyclicProofFactory
     $serviceHandle = $this->_dependencyManager->getManagedServiceHandle($implementationName);
 
 		$dependencyList = $this->_dependencyManager->getDependencyList($implementationName);
-        
-    $instance = $serviceHandle->getImplementation($parameters, $this, $dependencyList->getParameterArray());
     
+    $configuredParameterArray = $dependencyList->getParameterArray();
+    
+    $configuredParameterArray->setManager($this);
         
+    
+    
+    if ((count($parameters) > 0 ) && (!$configuredParameterArray->isEmpty()))
+    {
+        throw new \ErrorException('you cannot parameterize this service on the fly. It has already been configured. This is my name: '.$implementationName);
+    }
+    else if (count($parameters) > 0 ) 
+    {
+    	$instance = $serviceHandle->instantiate($parameters);
+    }
+    else if (!$configuredParameterArray->isEmpty())
+    {
+    	$instance = $serviceHandle->instantiate($configuredParameterArray->getParameter());
+    }
+    else 
+    {
+    	$instance = $serviceHandle->instantiate(array());
+    }
+    
+    
+
     if (!$serviceHandle->isFullyInstantiated())
     {
       $this->_cyclicRecorder[$implementationName] = $instance;        
 
       
-      foreach ($dependencyList->getList() as $dependency)
+      foreach ($dependencyList->getPropertyList() as $dependency)
       {
   			if ($dependency->isProvider())
   			{
@@ -82,7 +104,7 @@ class CyclicProofFactory
   			}
         
         $timer2 = $this->getStartedTimer('DM: requesting implementation');
-        $implementation = $dependency->getImplementation($parameters);
+        $implementation = $dependency->getInstance();
         $this->stopTimer($timer2);
                 
         $setImplementation = "set".ucfirst($dependency->getInterfaceName());

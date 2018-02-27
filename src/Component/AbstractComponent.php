@@ -8,7 +8,7 @@ abstract class AbstractComponent
 		$this->_instanceName = $instanceName;
 	}
 	
-	abstract public function getImplementation();
+	abstract public function getInstance();
 	
 
 	public function setInterfaceName($val)
@@ -22,11 +22,7 @@ abstract class AbstractComponent
 		return $this->interfaceName;
 	}
 
-	public function getImplementationName()
-	{
-	  return 'ImpName: '.$this->_instanceName;
-	}
-		
+
 	public function setManager($manager)
 	{
 		$this->dependencyManager = $manager;

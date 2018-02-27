@@ -5,7 +5,7 @@ class ManagedComponentProvider extends AbstractComponent
 {
 	
 	
-	public function getImplementation()
+	public function getInstance()
 	{
 		return $this;
 	}

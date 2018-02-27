@@ -4,7 +4,7 @@ namespace SugarLoaf\Component;
 class ManagedComponent extends AbstractComponent
 {
 	
-	public function getImplementation()
+	public function getInstance()
 	{
 		return $this->dependencyManager->get($this->_instanceName);
 	}
