@@ -7,6 +7,7 @@ class DependencyList
 	public function __construct()
 	{
 		$this->_list = array();
+		$this->parameterArray = new Parameter\ParameterArray();
 	}
 	
 	public function addDependency($interfaceName, $component)
@@ -34,9 +35,48 @@ class DependencyList
 		return $this->addDependency($interfaceName, $component);
 	}
 	
+	
+
+
+	public function appendManagedParameter($parameter)
+	{
+		$this->parameterArray->appendParameter(new Parameter\ManagedParameter($parameter));
+		return $this;
+	}
+
+	public function appendUnmanagedParameter($parameter)
+	{
+		$this->parameterArray->appendParameter(new Parameter\UnmanagedParameter($parameter));
+		return $this;
+	}
+
+
+	public function appendManagedParameterWithName($name, $parameter)
+	{
+		$this->parameterArray->appendNamedParameter($name, new Parameter\ManagedParameter($parameter));
+		return $this;
+	}
+
+	public function appendUnmanagedParameterWithName($name, $parameter)
+	{
+		$this->parameterArray->appendNamedParameter($name, new Parameter\UnmanagedParameter($parameter));
+		return $this;
+	}
+
+
+
+
+	
+	
+	
 	public function getList()
 	{
 		return $this->_list;
+	}
+	
+	public function getParameterArray()
+	{
+		return $this->parameterArray;
 	}
 	
 	

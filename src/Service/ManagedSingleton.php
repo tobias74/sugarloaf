@@ -7,10 +7,10 @@ class ManagedSingleton extends AbstractManagedService
 	protected $_isFullyInstantiated = false;
 	
 	
-  public function isFullyInstantiated()
-  {
-    return $this->_isFullyInstantiated;
-  }
+	public function isFullyInstantiated()
+	{
+		return $this->_isFullyInstantiated;
+	}
 		
 		
 	public function setFullyInstantiated()
@@ -20,21 +20,21 @@ class ManagedSingleton extends AbstractManagedService
 	
 	
 	
-	public function getImplementation($parameters=array(),$di)
+	public function getImplementation($parameters=array(), $di, $configuredParameterArray)
 	{
 		if (count($parameters)>0)
 		{
 			throw new \ErrorException('you cannot parameterize singletons on the fly. they start with what they stat. This is my name: '.$this->getServiceName());
 		}
 
-    $reflectionObject = new \ReflectionClass($this->_serviceClassRef);		
+    	$reflectionObject = new \ReflectionClass($this->_serviceClassRef);		
 		
 		if ($this->_instance === false)
 		{
-		    if ($this->_parameters != false)
+		    if (!$configuredParameterArray->isEmpty())
         {
-            $this->_parameters->setManager($di);
-            $this->_instance = $reflectionObject->newInstanceArgs($this->_parameters->getParameter());
+            $configuredParameterArray->setManager($di);
+            $this->_instance = $reflectionObject->newInstanceArgs($configuredParameterArray->getParameter());
         }
         else 
         {

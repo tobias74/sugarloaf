@@ -15,13 +15,13 @@ class ManagedService extends AbstractManagedService
 	}
 	
 	
-	public function getImplementation($parameters=array(),$di)
+	public function getImplementation($parameters=array(), $di, $configuredParameterArray)
 	{
     $reflectionObject = new \ReflectionClass($this->_serviceClassRef);
 
     if (count($parameters) > 0)
     {
-      if ($this->_parameters === false)
+      if ($configuredParameterArray->isEmpty())
       {
         $instance = $reflectionObject->newInstanceArgs($parameters);
       }
@@ -33,10 +33,10 @@ class ManagedService extends AbstractManagedService
     }
     else 
     {
-      if ($this->_parameters != false)
+      if (!$configuredParameterArray->isEmpty())
       {
-        $this->_parameters->setManager($di);
-        $instance = $reflectionObject->newInstanceArgs($this->_parameters->getParameter());
+        $configuredParameterArray->setManager($di);
+        $instance = $reflectionObject->newInstanceArgs($configuredParameterArray->getParameter());
       }
       else 
       {

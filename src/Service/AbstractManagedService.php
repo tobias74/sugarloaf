@@ -3,7 +3,7 @@ namespace SugarLoaf\Service;
 
 class AbstractManagedService
 {
-  public function __construct($serviceName, $serviceClassRef=false, $parameters=false)
+  public function __construct($serviceName, $serviceClassRef=false)
   {
     $this->_serviceName = $serviceName;
     
@@ -15,8 +15,6 @@ class AbstractManagedService
     {
       $this->_serviceClassRef = $serviceClassRef;
     }
-    
-    $this->_parameters = $parameters;
     
   }
   

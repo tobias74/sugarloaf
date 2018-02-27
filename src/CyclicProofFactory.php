@@ -60,9 +60,9 @@ class CyclicProofFactory
 	  
     $serviceHandle = $this->_dependencyManager->getManagedServiceHandle($implementationName);
 
+		$dependencyList = $this->_dependencyManager->getDependencyList($implementationName);
         
-    //$instance = $serviceHandle->getImplementation($parameters, $this->_dependencyManager);
-    $instance = $serviceHandle->getImplementation($parameters, $this);
+    $instance = $serviceHandle->getImplementation($parameters, $this, $dependencyList->getParameterArray());
     
         
     if (!$serviceHandle->isFullyInstantiated())
@@ -70,7 +70,7 @@ class CyclicProofFactory
       $this->_cyclicRecorder[$implementationName] = $instance;        
 
       
-      foreach ($this->_dependencyManager->getDependencyList($implementationName)->getList() as $dependency)
+      foreach ($dependencyList->getList() as $dependency)
       {
   			if ($dependency->isProvider())
   			{

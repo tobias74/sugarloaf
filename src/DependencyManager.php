@@ -73,15 +73,15 @@ class DependencyManager
 		return $dl;
 	}
 	
-	public function registerService($serviceName, $serviceClassRef=false, $parameters=false)
+	public function registerService($serviceName, $serviceClassRef=false)
 	{
-		$service = new \SugarLoaf\Service\ManagedService($serviceName, $serviceClassRef, $parameters);
+		$service = new \SugarLoaf\Service\ManagedService($serviceName, $serviceClassRef);
 		return $this->registerDependencyManagedService($service);
 	}
 
-	public function registerSingleton($serviceName, $serviceClassRef=false, $parameters=false)
+	public function registerSingleton($serviceName, $serviceClassRef=false)
 	{
-		$singleton = new \SugarLoaf\Service\ManagedSingleton($serviceName, $serviceClassRef, $parameters);
+		$singleton = new \SugarLoaf\Service\ManagedSingleton($serviceName, $serviceClassRef);
 		return $this->registerDependencyManagedService($singleton);
 	}
 	

@@ -12,12 +12,25 @@ class ParameterArray extends AbstractParameter
 	public function appendParameter($parameter)
 	{
 		$this->_parameters[] = $parameter;
+		return $this;
 	}
 
-  public function appendNamedParameter($name, $parameter)
-  {
-    $this->_parameters[$name] = $parameter;
-  }
+
+	public function appendNamedParameter($name, $parameter)
+	{
+		$this->_parameters[$name] = $parameter;
+		return $this;
+	}
+
+
+	public function isEmpty()
+	{
+		return (count($this->_parameters) === 0);
+	}
+
+
+
+
 	
 	public function getParameter()
 	{
