@@ -45,6 +45,13 @@ class DependencyManager
 		return $instance;
 	}
 	
+	public function getProvider($serviceName)
+	{
+		$component = new \SugarLoaf\Component\ManagedComponentProvider($serviceName);
+		$component->setManager($this);
+		return $component;
+	}
+	
 	public function getDependencyList($name)
 	{
 		return $this->_dependenciesForService[$name];
