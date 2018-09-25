@@ -111,6 +111,11 @@ class CyclicProofFactory
         $instance->$setImplementation($implementation);
               
       }
+
+      foreach ($dependencyList->getCallbacks() as $callback)
+      {
+      	$callback($instance);
+      }
       
       $serviceHandle->setFullyInstantiated();
     }

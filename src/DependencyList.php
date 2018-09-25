@@ -8,6 +8,12 @@ class DependencyList
 	{
 		$this->propertyArray = array();
 		$this->parameterArray = new Parameter\ParameterArray();
+		$this->callbacks = array();
+	}
+	
+	public function addCallback($callback)
+	{
+		$this->callbacks[] = $callback;
 	}
 	
 	public function addDependency($interfaceName, $component)
@@ -89,6 +95,11 @@ class DependencyList
 	public function getParameterArray()
 	{
 		return $this->parameterArray;
+	}
+	
+	public function getCallbacks()
+	{
+		return $this->callbacks;
 	}
 	
 	
