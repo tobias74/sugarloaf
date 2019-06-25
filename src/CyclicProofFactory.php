@@ -3,6 +3,8 @@ namespace SugarLoaf;
 
 class CyclicProofFactory
 {
+	const CONSTRUCTOR_RECURSION_ERROR = 'if you see this, you tried to have recursive dependencies with constructor injection';
+	
 	public function __construct($context)
 	{
 		$this->_dependencyManager = $context;
@@ -34,7 +36,7 @@ class CyclicProofFactory
   
 	public function build($implementationName)
 	{
-		$cyclicHandle = (object) array('serviceName' => $implementationName, 'instance' => null);
+		$cyclicHandle = (object) array('serviceName' => $implementationName, 'instance' => CyclicProofFactory::CONSTRUCTOR_RECURSION_ERROR);
 	  $this->push($cyclicHandle);
 
     $serviceHandle = $this->_dependencyManager->getManagedServiceHandle($implementationName);
@@ -44,6 +46,7 @@ class CyclicProofFactory
     $configuredParameterArray->setManager($this);
     
   	$instance = $serviceHandle->instantiate($configuredParameterArray->getParameter());
+  	
 		$cyclicHandle->instance = $instance;
 		
     if (!$serviceHandle->isFullyInstantiated())
@@ -73,7 +76,11 @@ class CyclicProofFactory
 		$cyclicHandle = $this->findInStack($implementationName);
 		if ($cyclicHandle)
 		{
-      error_log('NOTICE SUGARLOAF: We have a cyclic dependency with '.$implementationName.' ### STACK: '.print_r($this->_cyclicDependencyStack, true));  
+      error_log('NOTICE SUGARLOAF: We have a cyclic dependency with '.$implementationName.' ### STACK: '.print_r($this->_cyclicDependencyStack, true));
+	  	if ($cyclicHandle->instance === CyclicProofFactory::CONSTRUCTOR_RECURSION_ERROR)
+	  	{
+	  		throw new \ErrorException('Recursion during Constructor-Injection: '.$implementationName);
+	  	}
 			return $cyclicHandle->instance;				
 		}
 		else
