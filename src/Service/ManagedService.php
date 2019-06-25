@@ -15,10 +15,10 @@ class ManagedService extends AbstractManagedService
 	}
 	
 	
-	public function instantiate($parameters=array())
+	public function instantiate($parameters)
 	{
-    $reflectionObject = new \ReflectionClass($this->_serviceClassRef);
-    $instance = $reflectionObject->newInstanceArgs($parameters);
+    	$reflectionObject = new \ReflectionClass($this->_serviceClassRef);
+    	$instance = $reflectionObject->newInstanceArgs($parameters);
 		return $instance;
 	}
 	

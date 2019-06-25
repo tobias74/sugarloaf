@@ -7,15 +7,24 @@ class CyclicProofFactory
 	{
 		$this->_dependencyManager = $context;
 		
-		$this->_cyclicRecorder = array();
-	
     $this->_cyclicDependencyStack = array();		
 	}
 	
 
-	protected function push($name)
+	protected function findInStack($serviceName)
 	{
-	  array_push($this->_cyclicDependencyStack,$name);
+	  foreach ($this->_cyclicDependencyStack as $cyclicHandle) 
+	  {
+	  	if ($cyclicHandle->serviceName === $serviceName)
+	  	{
+	  		return $cyclicHandle;
+	  	}
+	  }
+	}
+
+	protected function push($serviceHandle)
+	{
+	  array_push($this->_cyclicDependencyStack, $serviceHandle);
 	}
 	
   protected function pop()
@@ -25,25 +34,24 @@ class CyclicProofFactory
   
 	public function build($implementationName)
 	{
-	  $this->push($implementationName);
-	  
+		$cyclicHandle = (object) array('serviceName' => $implementationName, 'instance' => null);
+	  $this->push($cyclicHandle);
+
     $serviceHandle = $this->_dependencyManager->getManagedServiceHandle($implementationName);
 		$dependencyList = $this->_dependencyManager->getDependencyList($implementationName);
     
     $configuredParameterArray = $dependencyList->getParameterArray();
     $configuredParameterArray->setManager($this);
+    
   	$instance = $serviceHandle->instantiate($configuredParameterArray->getParameter());
-
+		$cyclicHandle->instance = $instance;
+		
     if (!$serviceHandle->isFullyInstantiated())
     {
-      $this->_cyclicRecorder[$implementationName] = $instance;        
-
       foreach ($dependencyList->getPropertyList() as $dependency)
       {
         $dependency->setManager($this);
-
         $implementation = $dependency->getInstance();
-
         $setImplementation = "set".ucfirst($dependency->getInterfaceName());
         $instance->$setImplementation($implementation);
       }
@@ -55,28 +63,23 @@ class CyclicProofFactory
       
       $serviceHandle->setFullyInstantiated();
     }
-    
-		
+
 		$this->pop();
 		return $instance;
 	}
 	
-	public function get($implementationName, $parameters = array())
+	public function get($implementationName)
 	{
-		if (isset($this->_cyclicRecorder[$implementationName]))
+		$cyclicHandle = $this->findInStack($implementationName);
+		if ($cyclicHandle)
 		{
-		  if (array_search($implementationName,$this->_cyclicDependencyStack) !== false)
-		  {
-        error_log('NOTICE SUGARLOAF: We have a cyclic dependency with '.$implementationName.' ### STACK: '.print_r($this->_cyclicDependencyStack, true));  
-		  }
-			$implementation = $this->_cyclicRecorder[$implementationName];				
+      error_log('NOTICE SUGARLOAF: We have a cyclic dependency with '.$implementationName.' ### STACK: '.print_r($this->_cyclicDependencyStack, true));  
+			return $cyclicHandle->instance;				
 		}
 		else
 		{
-			$implementation = $this->build($implementationName, $parameters);
+			return $this->build($implementationName);
 		}
-		
-		return $implementation;
 	}
 }
 

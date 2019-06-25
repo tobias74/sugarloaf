@@ -20,27 +20,15 @@ class ManagedSingleton extends AbstractManagedService
 	
 	
 	
-	public function instantiate($parameters=array())
+	public function instantiate($parameters)
 	{
-    	$reflectionObject = new \ReflectionClass($this->_serviceClassRef);		
-		
 		if ($this->_instance === false)
 		{
+	    	$reflectionObject = new \ReflectionClass($this->_serviceClassRef);		
             $this->_instance = $reflectionObject->newInstanceArgs($parameters);
 			return $this->_instance; 
 		}
-		else 
-		{
-			if (count($parameters)>0)
-			{
-				throw new \ErrorException('you cannot parameterize singletons on the fly. they start with what they stat. This is my name: '.$this->getServiceName());
-			}
-			else 
-			{
-				return $this->_instance; 
-			}
-		}
-
+		return $this->_instance; 
 	}
 	
 }

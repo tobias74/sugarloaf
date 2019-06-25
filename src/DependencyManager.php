@@ -4,7 +4,6 @@ namespace SugarLoaf;
 
 class DependencyManager
 {
-    static private $instance=false;
     protected $_serviceList;
     protected $_dependenciesForService;
 
@@ -15,10 +14,10 @@ class DependencyManager
     }
 
 
-	public function get($name, $parameters = array())
+	public function get($name)
 	{
 		$factory = new CyclicProofFactory($this);
-		$instance = $factory->build($name, $parameters);
+		$instance = $factory->build($name);
 		return $instance;
 	}
 	
