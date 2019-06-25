@@ -32,12 +32,6 @@ abstract class AbstractComponent
 	{
 	  return $this->dependencyManager;
 	}
-	
-	public function isProvider()
-	{
-		return false;
-	}
-	
-	
+
 }
 

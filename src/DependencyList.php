@@ -29,12 +29,6 @@ class DependencyList
 		return $this->addDependency($interfaceName, $component);
 	}
 
-	public function addManagedProvider($interfaceName, $serviceName)
-	{
-		$component = new \SugarLoaf\Component\ManagedComponentProvider($serviceName);
-		return $this->addDependency($interfaceName, $component);
-	}
-	
 	public function addUnmanagedInstance($interfaceName, $instance)
 	{
 		$component = new \SugarLoaf\Component\UnmanagedInstance($instance);
@@ -106,24 +100,3 @@ class DependencyList
 }
 
 
-
-
-
-/*
-    $depList = $dm->registerDependencyManagedService(new \SugarLoaf\Service\ManagedService('Tobias3','Tobias3'));
-
-    $nestedParameterArray = new \SugarLoaf\Parameter\ParameterArray();
-    $nestedParameterArray->appendParameter(new \SugarLoaf\Parameter\ManagedParameter('Tobias3'));
-    $depList = $dm->registerDependencyManagedService(new \SugarLoaf\Service\ManagedSingleton('Tobias2','Tobias2',$nestedParameterArray));
-
-    $outerArray = new \SugarLoaf\Parameter\ParameterArray();
-    $nestedParameterArray = new \SugarLoaf\Parameter\ParameterArray();
-    $nestedParameterArray->appendNamedParameter('tobias2',new \SugarLoaf\Parameter\ManagedParameter('Tobias2'));
-    $outerArray->appendParameter($nestedParameterArray);
-    $depList = $dm->registerDependencyManagedService(new \SugarLoaf\Service\ManagedService('Tobias','Tobias',$outerArray));
-
-
-    $depList = $dm->registerDependencyManagedService(new \SugarLoaf\Service\ManagedService('Somebody','Somebody'));
-      $depList->addDependency('Tobias', new \SugarLoaf\Component\ManagedComponent('Tobias'));
-
-*/

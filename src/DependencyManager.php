@@ -5,51 +5,21 @@ namespace SugarLoaf;
 class DependencyManager
 {
     static private $instance=false;
-    
-    protected $profiler = false;
-    protected $logger = false;
     protected $_serviceList;
     protected $_dependenciesForService;
-    
-    
+
 	public function __construct()
 	{
 		$this->_dependenciesForService = array();
 		$this->_serviceList = array();
     }
 
-	public function setProfiler($val)
-	{
-		$this->profiler = $val;
-	}
-	
-	public function getProfiler()
-	{
-		return $this->profiler;
-	}
 
-	public function setLogger($val)
-	{
-    	$this->logger = $val;
-	}
-  
-	public function getLogger()
-	{
-    	return $this->logger;
-	}
-	
 	public function get($name, $parameters = array())
 	{
 		$factory = new CyclicProofFactory($this);
 		$instance = $factory->build($name, $parameters);
 		return $instance;
-	}
-	
-	public function getProvider($serviceName)
-	{
-		$component = new \SugarLoaf\Component\ManagedComponentProvider($serviceName);
-		$component->setManager($this);
-		return $component;
 	}
 	
 	public function getDependencyList($name)
