@@ -36,17 +36,22 @@ class CyclicProofFactory
   
 	public function build($implementationName)
 	{
-		$cyclicHandle = (object) array('serviceName' => $implementationName, 'instance' => CyclicProofFactory::CONSTRUCTOR_RECURSION_ERROR);
+		$cyclicHandle = (object) array(
+			'serviceName' => $implementationName,
+			'instance' => null,
+			'constructorRecursionError' => CyclicProofFactory::CONSTRUCTOR_RECURSION_ERROR
+		);
 	  $this->push($cyclicHandle);
 
     $serviceHandle = $this->_dependencyManager->getManagedServiceHandle($implementationName);
 		$dependencyList = $this->_dependencyManager->getDependencyList($implementationName);
     
     $configuredParameterArray = $dependencyList->getParameterArray();
-
-  	$instance = $serviceHandle->instantiate($configuredParameterArray->getInstance($this));
-  	
-		$cyclicHandle->instance = $instance;
+    $parametersInstance = $configuredParameterArray->getInstance($this);
+    
+  	$serviceInstance = $serviceHandle->instantiate($parametersInstance);
+		$cyclicHandle->instance = $serviceInstance;
+		$cyclicHandle->constructorRecursionError = false;
 		
     if (!$serviceHandle->isFullyInstantiated())
     {
@@ -54,19 +59,19 @@ class CyclicProofFactory
       {
         $implementation = $dependency->getInstance($this);
         $setImplementation = "set".ucfirst($dependency->getInterfaceName());
-        $instance->$setImplementation($implementation);
+        $serviceInstance->$setImplementation($implementation);
       }
 
       foreach ($dependencyList->getCallbacks() as $callback)
       {
-      	$callback($instance);
+      	$callback($serviceInstance);
       }
       
       $serviceHandle->setFullyInstantiated();
     }
 
 		$this->pop();
-		return $instance;
+		return $serviceInstance;
 	}
 	
 	public function get($implementationName)
@@ -75,7 +80,7 @@ class CyclicProofFactory
 		if ($cyclicHandle)
 		{
       error_log('NOTICE SUGARLOAF: We have a cyclic dependency with '.$implementationName.' ### STACK: '.print_r($this->_cyclicDependencyStack, true));
-	  	if ($cyclicHandle->instance === CyclicProofFactory::CONSTRUCTOR_RECURSION_ERROR)
+	  	if ($cyclicHandle->constructorRecursionError === CyclicProofFactory::CONSTRUCTOR_RECURSION_ERROR)
 	  	{
 	  		throw new \ErrorException('Recursion during Constructor-Injection: '.$implementationName);
 	  	}

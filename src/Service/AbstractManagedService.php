@@ -1,7 +1,7 @@
 <?php
 namespace SugarLoaf\Service;
 
-class AbstractManagedService
+abstract class AbstractManagedService
 {
   public function __construct($serviceName, $serviceClassRef=false)
   {
@@ -17,6 +17,8 @@ class AbstractManagedService
     }
     
   }
+  
+  abstract public function instantiate($parameters);
   
   public function getServiceName()
   {
