@@ -44,7 +44,7 @@ class CyclicProofFactory
     
     $configuredParameterArray = $dependencyList->getParameterArray();
 
-  	$instance = $serviceHandle->instantiate($configuredParameterArray->getParameter($this));
+  	$instance = $serviceHandle->instantiate($configuredParameterArray->getInstance($this));
   	
 		$cyclicHandle->instance = $instance;
 		

@@ -66,7 +66,7 @@ class ParameterArray
 
 
 	
-	public function getParameter($manager)
+	public function getInstance($manager)
 	{
 		$output = array();
 		foreach ($this->_parameters as $index => $parameter)
