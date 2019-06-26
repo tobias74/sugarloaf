@@ -1,5 +1,5 @@
 <?php 
-namespace SugarLoaf\Parameter;
+namespace SugarLoaf;
 
 
 class ParameterArray
@@ -18,25 +18,25 @@ class ParameterArray
 
 	public function appendManagedParameter($parameter)
 	{
-		$this->appendParameter(new \SugarLoaf\Component\ManagedComponent($parameter));
+		$this->appendParameter(new \SugarLoaf\Dependency\ManagedDependency($parameter));
 		return $this;
 	}
 
 	public function appendUnmanagedParameter($parameter)
 	{
-		$this->appendParameter(new \SugarLoaf\Component\UnmanagedInstance($parameter));
+		$this->appendParameter(new \SugarLoaf\Dependency\UnmanagedInstance($parameter));
 		return $this;
 	}
 
 	public function appendManagedParameterWithName($name, $parameter)
 	{
-		$this->appendNamedParameter($name, new \SugarLoaf\Component\ManagedComponent($parameter));
+		$this->appendNamedParameter($name, new \SugarLoaf\Dependency\ManagedDependency($parameter));
 		return $this;
 	}
 
 	public function appendUnmanagedParameterWithName($name, $parameter)
 	{
-		$this->appendNamedParameter($name, new \SugarLoaf\Component\UnmanagedInstance($parameter));
+		$this->appendNamedParameter($name, new \SugarLoaf\Dependency\UnmanagedInstance($parameter));
 		return $this;
 	}
 

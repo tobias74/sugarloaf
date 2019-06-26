@@ -1,7 +1,7 @@
 <?php
-namespace SugarLoaf\Component;
+namespace SugarLoaf\Dependency;
 
-class UnmanagedInstance extends AbstractComponent
+class UnmanagedInstance extends AbstractDependency
 {
 	public function __construct($instance)
 	{

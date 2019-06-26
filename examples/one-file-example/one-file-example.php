@@ -89,8 +89,8 @@ $dependencyManager->registerDependencyManagedService(new \SugarLoaf\Service\Mana
                   
     
 $dependencyManager->registerDependencyManagedService(new \SugarLoaf\Service\ManagedService('MyApplication','Application'))
-                  ->addDependency('Logger', new \SugarLoaf\Component\ManagedComponent('Logger'))
-                  ->addDependency('AnotherLogger', new \SugarLoaf\Component\ManagedComponent('LoggerTwo'));
+                  ->addDependency('Logger', new \SugarLoaf\Component\ManagedDependency('Logger'))
+                  ->addDependency('AnotherLogger', new \SugarLoaf\Component\ManagedDependency('LoggerTwo'));
                   
 
 $application = $dependencyManager->get('MyApplication');

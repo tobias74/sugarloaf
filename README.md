@@ -80,8 +80,8 @@ $dependencyManager->registerDependencyManagedService(new \SugarLoaf\Service\Mana
                   
     
 $dependencyManager->registerDependencyManagedService(new \SugarLoaf\Service\ManagedService('MyApplication','Application'))
-                  ->addDependency('Logger', new \SugarLoaf\Component\ManagedComponent('Logger'))
-                  ->addDependency('AnotherLogger', new \SugarLoaf\Component\ManagedComponent('LoggerTwo'));
+                  ->addDependency('Logger', new \SugarLoaf\Component\ManagedDependency('Logger'))
+                  ->addDependency('AnotherLogger', new \SugarLoaf\Component\ManagedDependency('LoggerTwo'));
                   
 
 $application = $dependencyManager->get('MyApplication');
@@ -96,4 +96,4 @@ $application->run();
 Using Service-Providers
 -----------------------
 
-In case a service can be preconfigured to use different dependencies, but still needs to be injected with another instance only available at runtime, the class "ManagedComponentProvider" implements a wrapper that can be called by its "provide"-Method. See examples in the git-repo for further information.
+In case a service can be preconfigured to use different dependencies, but still needs to be injected with another instance only available at runtime, the class "ManagedDependencyProvider" implements a wrapper that can be called by its "provide"-Method. See examples in the git-repo for further information.

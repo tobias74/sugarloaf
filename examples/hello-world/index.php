@@ -41,16 +41,16 @@ $dependencyManager = \SugarLoaf\DependencyManager::getInstance();
 
 
 $dependencyManager->registerDependencyManagedService(new \SugarLoaf\Service\ManagedSingleton('ApplicationServiceFacade'))
-                  ->addDependency('Database', new \SugarLoaf\Component\ManagedComponent('Database'))
-                  ->addDependency('Profiler', new \SugarLoaf\Component\ManagedComponent('Profiler'));
+                  ->addDependency('Database', new \SugarLoaf\Component\ManagedDependency('Database'))
+                  ->addDependency('Profiler', new \SugarLoaf\Component\ManagedDependency('Profiler'));
                   
 		
 $dependencyManager->registerDependencyManagedService(new \SugarLoaf\Service\ManagedSingleton('Profiler'))
-                  ->addDependency('ApplicationFacade', new \SugarLoaf\Component\ManagedComponent('ApplicationServiceFacade'));
+                  ->addDependency('ApplicationFacade', new \SugarLoaf\Component\ManagedDependency('ApplicationServiceFacade'));
                   
 
 $dependencyManager->registerDependencyManagedService(new \SugarLoaf\Service\ManagedService('Database'))
-                  ->addDependency('Profiler', new \SugarLoaf\Component\ManagedComponent('Profiler'));
+                  ->addDependency('Profiler', new \SugarLoaf\Component\ManagedDependency('Profiler'));
                   		
 
 $facade = $dependencyManager->get('ApplicationServiceFacade');

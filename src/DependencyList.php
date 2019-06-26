@@ -7,7 +7,7 @@ class DependencyList
 	public function __construct()
 	{
 		$this->propertyArray = array();
-		$this->parameterArray = new Parameter\ParameterArray();
+		$this->parameterArray = new ParameterArray();
 		$this->callbacks = array();
 	}
 	
@@ -25,13 +25,13 @@ class DependencyList
 	
 	public function addManagedDependency($interfaceName, $serviceName)
 	{
-		$component = new \SugarLoaf\Component\ManagedComponent($serviceName);
+		$component = new \SugarLoaf\Dependency\ManagedDependency($serviceName);
 		return $this->addDependency($interfaceName, $component);
 	}
 
 	public function addUnmanagedInstance($interfaceName, $instance)
 	{
-		$component = new \SugarLoaf\Component\UnmanagedInstance($instance);
+		$component = new \SugarLoaf\Dependency\UnmanagedInstance($instance);
 		return $this->addDependency($interfaceName, $component);
 	}
 	
@@ -65,14 +65,14 @@ class DependencyList
 
 	public function startManagedParameterArray()
 	{
-		$managedParameterArray = new Parameter\ParameterArray($this);
+		$managedParameterArray = new ParameterArray($this);
 		$this->parameterArray->appendParameter($managedParameterArray);
 		return $managedParameterArray;
 	}
 
 	public function startManagedParameterArrayWithName($name)
 	{
-		$managedParameterArray = new Parameter\ParameterArray($this);
+		$managedParameterArray = new ParameterArray($this);
 		$this->parameterArray->appendNamedParameter($name, $managedParameterArray);
 		return $managedParameterArray;
 	}

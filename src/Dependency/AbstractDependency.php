@@ -1,7 +1,7 @@
 <?php
-namespace SugarLoaf\Component;
+namespace SugarLoaf\Dependency;
 
-abstract class AbstractComponent
+abstract class AbstractDependency
 {
 	
 	abstract public function getInstance($manager);
