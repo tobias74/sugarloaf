@@ -3,10 +3,14 @@ namespace SugarLoaf\Component;
 
 class ManagedComponent extends AbstractComponent
 {
-	
-	public function getInstance()
+	public function __construct($instanceName)
 	{
-		return $this->dependencyManager->get($this->_instanceName);
+		$this->_instanceName = $instanceName;
+	}
+	
+	public function getInstance($manager)
+	{
+		return $manager->get($this->_instanceName);
 	}
 	
 }

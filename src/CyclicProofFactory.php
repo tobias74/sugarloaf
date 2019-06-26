@@ -43,9 +43,8 @@ class CyclicProofFactory
 		$dependencyList = $this->_dependencyManager->getDependencyList($implementationName);
     
     $configuredParameterArray = $dependencyList->getParameterArray();
-    $configuredParameterArray->setManager($this);
-    
-  	$instance = $serviceHandle->instantiate($configuredParameterArray->getParameter());
+
+  	$instance = $serviceHandle->instantiate($configuredParameterArray->getParameter($this));
   	
 		$cyclicHandle->instance = $instance;
 		
@@ -53,8 +52,7 @@ class CyclicProofFactory
     {
       foreach ($dependencyList->getPropertyList() as $dependency)
       {
-        $dependency->setManager($this);
-        $implementation = $dependency->getInstance();
+        $implementation = $dependency->getInstance($this);
         $setImplementation = "set".ucfirst($dependency->getInterfaceName());
         $instance->$setImplementation($implementation);
       }

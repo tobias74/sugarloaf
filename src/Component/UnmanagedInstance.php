@@ -8,16 +8,10 @@ class UnmanagedInstance extends AbstractComponent
 		$this->instance = $instance;
 	}
 	
-	public function getInstance()
+	public function getInstance($manager)
 	{
 		return $this->instance;
 	}
 	
 }
 
-/*
-class UnmanagedValue extends UnmanagedInstance
-{
-  
-}
-*/

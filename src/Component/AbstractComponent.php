@@ -3,13 +3,9 @@ namespace SugarLoaf\Component;
 
 abstract class AbstractComponent
 {
-	public function __construct($instanceName)
-	{
-		$this->_instanceName = $instanceName;
-	}
 	
-	abstract public function getInstance();
-	
+	abstract public function getInstance($manager);
+
 
 	public function setInterfaceName($val)
 	{
@@ -22,16 +18,6 @@ abstract class AbstractComponent
 		return $this->interfaceName;
 	}
 
-
-	public function setManager($manager)
-	{
-		$this->dependencyManager = $manager;
-	}
-	
-	protected function getManager()
-	{
-	  return $this->dependencyManager;
-	}
 
 }
 

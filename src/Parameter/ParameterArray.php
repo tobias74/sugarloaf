@@ -2,7 +2,7 @@
 namespace SugarLoaf\Parameter;
 
 
-class ParameterArray extends AbstractParameter
+class ParameterArray
 {
 	public function __construct($dslContext=false)
 	{
@@ -18,25 +18,25 @@ class ParameterArray extends AbstractParameter
 
 	public function appendManagedParameter($parameter)
 	{
-		$this->appendParameter(new ManagedParameter($parameter));
+		$this->appendParameter(new \SugarLoaf\Component\ManagedComponent($parameter));
 		return $this;
 	}
 
 	public function appendUnmanagedParameter($parameter)
 	{
-		$this->appendParameter(new UnmanagedParameter($parameter));
+		$this->appendParameter(new \SugarLoaf\Component\UnmanagedInstance($parameter));
 		return $this;
 	}
 
 	public function appendManagedParameterWithName($name, $parameter)
 	{
-		$this->appendNamedParameter($name, new ManagedParameter($parameter));
+		$this->appendNamedParameter($name, new \SugarLoaf\Component\ManagedComponent($parameter));
 		return $this;
 	}
 
 	public function appendUnmanagedParameterWithName($name, $parameter)
 	{
-		$this->appendNamedParameter($name, new UnmanagedParameter($parameter));
+		$this->appendNamedParameter($name, new \SugarLoaf\Component\UnmanagedInstance($parameter));
 		return $this;
 	}
 
@@ -66,13 +66,12 @@ class ParameterArray extends AbstractParameter
 
 
 	
-	public function getParameter()
+	public function getParameter($manager)
 	{
 		$output = array();
 		foreach ($this->_parameters as $index => $parameter)
 		{
-		  $parameter->setManager($this->dependencyManager);
-			$output[$index] = $parameter->getParameter();
+			$output[$index] = $parameter->getInstance($manager);
 		}
 		
 		return $output;
