@@ -63,24 +63,7 @@ class DependencyList
 		return $this;
 	}
 
-	public function startManagedParameterArray()
-	{
-		$managedParameterArray = new ParameterArray($this);
-		$this->parameterArray->appendParameter($managedParameterArray);
-		return $managedParameterArray;
-	}
 
-	public function startManagedParameterArrayWithName($name)
-	{
-		$managedParameterArray = new ParameterArray($this);
-		$this->parameterArray->appendNamedParameter($name, $managedParameterArray);
-		return $managedParameterArray;
-	}
-
-
-	
-	
-	
 	public function getPropertyList()
 	{
 		return $this->propertyArray;

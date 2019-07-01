@@ -4,18 +4,11 @@ namespace SugarLoaf;
 
 class ParameterArray
 {
-	public function __construct($dslContext=false)
+	public function __construct()
 	{
-		$this->dslContext = $dslContext;
 		$this->_parameters = array();
 	}
 	
-	public function finishParameterArray()
-	{
-		return $this->dslContext;
-	}
-
-
 	public function appendManagedParameter($parameter)
 	{
 		$this->appendParameter(new \SugarLoaf\Dependency\ManagedDependency($parameter));

@@ -48,6 +48,7 @@ class Logger
 //Class that uses Setter-Injection
 class Application
 {
+
   public function setLogger($logger){
     $this->logger = $logger;
   }
@@ -56,10 +57,17 @@ class Application
     $this->anotherLogger = $logger;
   }
   
+  public function customSetup($data)
+  {
+    $this->myData = $data;
+  }
+  
+  
   public function run(){
     $this->logger->info('Starting Application...');
     $this->anotherLogger->info('Same here...');
-    echo "done.";
+    echo "This is my data: ".$this->myData;
+    echo " ...done.\n";
   }
 }
 
@@ -68,29 +76,31 @@ class Application
 
 // Configuration of the DI-Container
 
-$dependencyManager = \SugarLoaf\DependencyManager::getInstance();
+$dependencyManager = new \SugarLoaf\DependencyManager();
 
 
-// the LogFile-Class does not need have Dependencies
-$dependencyManager->registerDependencyManagedService(new \SugarLoaf\Service\ManagedService('LogFile'));
+// Declare LogFile with its classname as a string
+$dependencyManager->registerService('LogFile');
 
 
-// the Logger-Class takes to arguments in its constructor
-$parameter = new \SugarLoaf\Parameter\ParameterArray();
-$parameter->appendParameter(new \SugarLoaf\Parameter\ManagedParameter('LogFile'));
-$parameter->appendParameter(new \SugarLoaf\Parameter\UnmanagedParameter('My_Prefix'));
-$dependencyManager->registerDependencyManagedService(new \SugarLoaf\Service\ManagedSingleton('Logger','Logger',$parameter));
+// Declare Logger with its class and declare a name
+$dependencyManager->registerService('Logger', Logger::Class)
+                  ->appendManagedParameter('LogFile')
+                  ->appendUnmanagedParameter('My_Prefix');
 
-// the Logger-Class takes to arguments in its constructor
-$parameter = new \SugarLoaf\Parameter\ParameterArray();
-$parameter->appendParameter(new \SugarLoaf\Parameter\ManagedParameter('LogFile'));
-$parameter->appendParameter(new \SugarLoaf\Parameter\UnmanagedParameter('Another_Prefix'));
-$dependencyManager->registerDependencyManagedService(new \SugarLoaf\Service\ManagedSingleton('LoggerTwo','Logger',$parameter));
+
+// Declare another Logger with its class and name
+$dependencyManager->registerService('LoggerTwo', Logger::Class)
+                  ->appendManagedParameter('LogFile')
+                  ->appendUnmanagedParameter('Another_Prefix');
                   
-    
-$dependencyManager->registerDependencyManagedService(new \SugarLoaf\Service\ManagedService('MyApplication','Application'))
-                  ->addDependency('Logger', new \SugarLoaf\Component\ManagedDependency('Logger'))
-                  ->addDependency('AnotherLogger', new \SugarLoaf\Component\ManagedDependency('LoggerTwo'));
+// Declare a Service by classname
+$dependencyManager->registerService('MyApplication', 'Application')
+                  ->addManagedDependency('Logger', 'Logger')
+                  ->addManagedDependency('AnotherLogger', 'LoggerTwo')
+                  ->addCallback(function($myInstance){
+                    $myInstance->customSetup('Good Morning!');
+                  });
                   
 
 $application = $dependencyManager->get('MyApplication');
