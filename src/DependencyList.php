@@ -23,8 +23,12 @@ class DependencyList
 		return $this;
 	}
 	
-	public function addManagedDependency($interfaceName, $serviceName)
+	public function addManagedDependency($interfaceName, $serviceName=false)
 	{
+		if ($serviceName===false)
+		{
+			$serviceName = $interfaceName;
+		}
 		$component = new \SugarLoaf\Dependency\ManagedDependency($serviceName);
 		return $this->addDependency($interfaceName, $component);
 	}
