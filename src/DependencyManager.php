@@ -5,60 +5,53 @@ namespace SugarLoaf;
 class DependencyManager
 {
     protected $_serviceList;
-    protected $_dependenciesForService;
 
-	public function __construct()
-	{
-		$this->_dependenciesForService = array();
-		$this->_serviceList = array();
+    public function __construct()
+    {
+        $this->_serviceList = array();
     }
 
+    public function get($name)
+    {
+        $factory = new CyclicProofFactory($this);
+        $instance = $factory->build($name);
 
-	public function get($name)
-	{
-		$factory = new CyclicProofFactory($this);
-		$instance = $factory->build($name);
-		return $instance;
-	}
-	
-	public function getDependencyList($name)
-	{
-		return $this->_dependenciesForService[$name];
-	}
-	
-	public function getManagedServiceHandle($name)
-	{
-		if (!isset($this->_serviceList[$name]))
-		{
-			throw new \ErrorException('This Service has not been declared in the DI: '.$name);
-		}
-		
-		return $this->_serviceList[$name];
-	}
-	
-	protected function addDependencyList($managedService,$dependencyList)
-	{
-		$this->_dependenciesForService[$managedService->getServiceName()] = $dependencyList;
-		$this->_serviceList[$managedService->getServiceName()] = $managedService;
-	}
-	
-	public function registerDependencyManagedService($managedService)
-	{
-		$dl = new DependencyList();
-		$this->addDependencyList($managedService, $dl);
-		return $dl;
-	}
-	
-	public function registerService($serviceName, $serviceClassRef=false)
-	{
-		$service = new \SugarLoaf\Service\ManagedService($serviceName, $serviceClassRef);
-		return $this->registerDependencyManagedService($service);
-	}
+        return $instance;
+    }
 
-	public function registerSingleton($serviceName, $serviceClassRef=false)
-	{
-		$singleton = new \SugarLoaf\Service\ManagedSingleton($serviceName, $serviceClassRef);
-		return $this->registerDependencyManagedService($singleton);
-	}
-	
+    public function getManagedServiceHandle($name)
+    {
+        if (!isset($this->_serviceList[$name])) {
+            throw new \ErrorException('This Service has not been declared in the DI: '.$name);
+        }
+
+        return $this->_serviceList[$name];
+    }
+
+    public function registerDependencyManagedService($managedService)
+    {
+        $this->_serviceList[$managedService->getServiceName()] = $managedService;
+    }
+
+    public function registerService($serviceName, $serviceClassRef = false)
+    {
+        $service = new \SugarLoaf\Service\ManagedService($serviceName, $serviceClassRef);
+        $this->registerDependencyManagedService($service);
+
+        return $service->getDependencyList();
+    }
+
+    public function registerSingleton($serviceName, $serviceClassRef = false)
+    {
+        $singleton = new \SugarLoaf\Service\ManagedSingleton($serviceName, $serviceClassRef);
+        $this->registerDependencyManagedService($singleton);
+
+        return $singleton->getDependencyList();
+    }
+
+    public function registerFactoryCallback($serviceName, $callback)
+    {
+        $factoryCallback = new \SugarLoaf\Service\FactoryCallback($serviceName, $callback);
+        $this->registerDependencyManagedService($factoryCallback);
+    }
 }
